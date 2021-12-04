@@ -50,7 +50,6 @@ jobs:
   heroku-deploy-Secrets:
     if: ${{ github.event.inputs.actions == '' && secrets.APP_NAME && secrets.HEROKU_API_KEY && secrets.EMAIL && secrets.HEROKU_V2RAY_UUID}}
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.env }}
     steps:
       - run: echo deploy heroku -> ${{secrets.APP_NAME}}
       - uses: actions/checkout@v2
