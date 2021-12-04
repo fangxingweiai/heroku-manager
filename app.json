@@ -1,0 +1,14 @@
+{
+    "name": "hello world",
+    "description": "This is a demo.",
+    "keywords": [
+        "hello world"
+    ],
+    "env": {
+        "UUID": {
+            "description": "UUID",
+            "value": "1929b7j3-8abq-4c3f-974w-51e8878884hf"
+        }
+    },
+    "stack": "container"
+}

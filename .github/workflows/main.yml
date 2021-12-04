@@ -1,0 +1,65 @@
+name: heroku-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      actions:
+        description: "action: deploy"
+        required: true
+        default: "deploy"
+      env:
+        description: "environment: Input the name of Environment. If left blank, the main secrets setting will be used by default."
+        required: false
+        default: ""
+
+jobs:
+  heroku-deploy-1-env:
+    if: ${{ github.event.inputs.actions == 'deploy' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    steps:
+      - run: echo deploy heroku-1 -> ${{secrets.APP_NAME1}}
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY1}}
+          heroku_app_name: ${{secrets.APP_NAME1}}
+          heroku_email: ${{secrets.EMAIL1}}
+          usedocker: true
+        env:
+          # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
+          HD_UUID: ${{ secrets.HEROKU_V2RAY_UUID }}
+
+  heroku-deploy-2-env:
+    if: ${{ github.event.inputs.actions == 'deploy' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    steps:
+      - run: echo deploy heroku-2 -> ${{secrets.APP_NAME2}}
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY2}}
+          heroku_app_name: ${{secrets.APP_NAME2}}
+          heroku_email: ${{secrets.EMAIL2}}
+          usedocker: true
+        env:
+          # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
+          HD_UUID: ${{ secrets.HEROKU_V2RAY_UUID }}
+
+  heroku-deploy-Secrets:
+    if: ${{ github.event.inputs.actions == '' && secrets.APP_NAME && secrets.HEROKU_API_KEY && secrets.EMAIL && secrets.HEROKU_V2RAY_UUID}}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    steps:
+      - run: echo deploy heroku -> ${{secrets.APP_NAME}}
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.APP_NAME}}
+          heroku_email: ${{secrets.EMAIL}}
+          usedocker: true
+        env:
+          # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
+          HD_UUID: ${{ secrets.HEROKU_V2RAY_UUID }}
