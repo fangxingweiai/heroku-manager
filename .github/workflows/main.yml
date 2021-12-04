@@ -48,7 +48,7 @@ jobs:
           HD_UUID: ${{ secrets.HEROKU_V2RAY_UUID }}
 
   heroku-deploy-Secrets:
-    if: ${{ github.event.inputs.actions == '' && secrets.APP_NAME && secrets.HEROKU_API_KEY && secrets.EMAIL && secrets.HEROKU_V2RAY_UUID}}
+    if: ${{ github.event.inputs.actions == '' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo deploy heroku -> ${{secrets.APP_NAME}}
