@@ -100,7 +100,7 @@ jobs:
           HD_ParameterSSENCYPT: secrets.ParameterSSENCYPT || chacha20-ietf-poly1305
 
   heroku-destroy-secrets:
-    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env == '' && secrets.APP_NAME != '' }}
+    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env == '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
