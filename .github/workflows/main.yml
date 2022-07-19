@@ -1,10 +1,10 @@
-name: heroku-deploy
+name: heroku-manage
 
 on:
   workflow_dispatch:
     inputs:
       actions:
-        description: "action: deploy"
+        description: "action: deploy or destroy"
         required: true
         default: "deploy"
       env:
@@ -13,7 +13,37 @@ on:
         default: ""
 
 jobs:
-  heroku-deploy-1-env:
+  heroku-destroy-env-1:
+    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env != '' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY1}}
+          heroku_email: ${{secrets.EMAIL1}}
+          justlogin: true
+      - run: |
+          echo destroy app==> ${{ secrets.APP_NAME1 }}
+          if [[ ${{ secrets.APP_NAME1 }} ]]; then heroku apps:destroy -a ${{secrets.APP_NAME1}} --confirm ${{secrets.APP_NAME1}} && echo "destroy app"; fi
+
+  heroku-destroy-env-2:
+    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env != '' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY2}}
+          heroku_email: ${{secrets.EMAIL2}}
+          justlogin: true
+      - run: |
+          echo destroy app==> ${{ secrets.APP_NAME2 }}
+          if [[ ${{ secrets.APP_NAME2 }} ]]; then heroku apps:destroy -a ${{secrets.APP_NAME2}} --confirm ${{secrets.APP_NAME2}} && echo "destroy app"; fi
+
+  heroku-deploy-env-1:
     if: ${{ github.event.inputs.actions == 'deploy' && github.event.inputs.env != '' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
@@ -29,10 +59,10 @@ jobs:
         env:
           # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
           HD_AUUID: ${{ secrets.UUID }}
-          HD_CADDYIndexPage: https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html
-          HD_ParameterSSENCYPT: chacha20-ietf-poly1305
+          HD_CADDYIndexPage: ${{ secrets.CADDYIndexPage || https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html }}
+          HD_ParameterSSENCYPT: ${{ secrets.ParameterSSENCYPT || chacha20-ietf-poly1305 }}
 
-  heroku-deploy-2-env:
+  heroku-deploy-env-2:
     if: ${{ github.event.inputs.actions == 'deploy' && github.event.inputs.env != '' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
@@ -48,10 +78,10 @@ jobs:
         env:
           # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
           HD_AUUID: ${{ secrets.UUID }}
-          HD_CADDYIndexPage: https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html
-          HD_ParameterSSENCYPT: chacha20-ietf-poly1305
+          HD_CADDYIndexPage: ${{ secrets.CADDYIndexPage || https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html }}
+          HD_ParameterSSENCYPT: ${{ secrets.ParameterSSENCYPT || chacha20-ietf-poly1305 }}
 
-  heroku-deploy-Secrets:
+  heroku-deploy-secrets:
     if: ${{ github.event.inputs.actions == 'deploy' && github.event.inputs.env == '' }}
     runs-on: ubuntu-latest
     steps:
@@ -66,5 +96,20 @@ jobs:
         env:
           # 这是为了heroku，注意前缀有个HD，这是为了告诉heroku-deploy，这些变量需要传入到container 中。
           HD_AUUID: ${{ secrets.UUID }}
-          HD_CADDYIndexPage: https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html
-          HD_ParameterSSENCYPT: chacha20-ietf-poly1305
+          HD_CADDYIndexPage: ${{ secrets.CADDYIndexPage || https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html }}
+          HD_ParameterSSENCYPT: ${{ secrets.ParameterSSENCYPT || chacha20-ietf-poly1305 }}
+
+  heroku-destroy-secrets:
+    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env == '' && secrets.APP_NAME != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.UUID}}
+          heroku_email: ${{secrets.EMAIL}}
+          justlogin: true
+      - run: |
+          echo destroy app==> ${{ secrets.APP_NAME }}
+          if [[ ${{ secrets.APP_NAME }} ]]; then heroku apps:destroy -a ${{secrets.APP_NAME}} --confirm ${{secrets.APP_NAME}} && echo "destroy app"; fi
+    
