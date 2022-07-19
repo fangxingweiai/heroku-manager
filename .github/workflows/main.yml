@@ -14,7 +14,7 @@ on:
 
 jobs:
   heroku-destroy-env-1:
-    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env != '' }}
+    if: ${{ github.event.inputs.actions == 'destroy' && github.event.inputs.env != '' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     steps:
@@ -29,7 +29,7 @@ jobs:
           if [[ ${{ secrets.APP_NAME1 }} ]]; then heroku apps:destroy -a ${{secrets.APP_NAME1}} --confirm ${{secrets.APP_NAME1}} && echo "destroy app"; fi
 
   heroku-destroy-env-2:
-    if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env != '' }}
+    if: ${{ github.event.inputs.actions == 'destroy' && github.event.inputs.env != '' }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     steps:
