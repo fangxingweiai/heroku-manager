@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY1}}
           heroku_email: ${{secrets.EMAIL1}}
@@ -33,8 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY2}}
           heroku_email: ${{secrets.EMAIL2}}
@@ -49,8 +49,8 @@ jobs:
     environment: ${{ github.event.inputs.env }}
     steps:
       - run: echo deploy app==> ${{secrets.APP_NAME1}}
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY1}}
           heroku_app_name: ${{secrets.APP_NAME1}}
@@ -68,8 +68,8 @@ jobs:
     environment: ${{ github.event.inputs.env }}
     steps:
       - run: echo deploy app==> ${{secrets.APP_NAME2}}
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY2}}
           heroku_app_name: ${{secrets.APP_NAME2}}
@@ -86,8 +86,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo deploy heroku -> ${{secrets.APP_NAME}}
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.APP_NAME}}
@@ -103,8 +103,8 @@ jobs:
     if: ${{ github.event.inputs.actions  == 'destroy' && github.event.inputs.env == '' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: actions/checkout@main
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_email: ${{secrets.EMAIL}}
